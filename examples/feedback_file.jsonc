@@ -1,0 +1,21 @@
+{
+    "agentRegistry": "eip155:1:{identityRegistry}",
+    "agentId": 22,
+    "clientAddress": "eip155:1:{clientAddress}",
+    "createdAt": "2025-09-23T12:00:00Z",
+    "feedbackAuth": "...",
+    "score": 70,
+    "tag1": "foo",
+    "tag2": "bar",
+    "skill": "as-defined-by-A2A",
+    "context": "as-defined-by-A2A",
+    "task": "as-defined-by-A2A",
+    "capability": "tools", // As per MCP: "prompts", "resources", "tools" or "completions"
+    "name": "Put the name of the MCP tool you liked!",
+    "proof_of_payment": {
+      "fromAddress": "0x00...",
+      "toAddress": "0x00...",
+      "chainId": "1",
+      "txHash": "0x00..." 
+     }
+  }

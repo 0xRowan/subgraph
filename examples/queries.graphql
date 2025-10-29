@@ -1,0 +1,428 @@
+# Agent0 SDK Subgraph - Meaningful Query Examples
+# Practical queries for agent discovery, feedback analysis, and protocol exploration
+
+# =============================================================================
+# QUERY 1: Complete Agent Details
+# =============================================================================
+# Get all details including metadata, feedback, and responses for a specific agent
+
+query GetCompleteAgentDetails($agentId: ID!) {
+  agent(id: $agentId) {
+    id
+    chainId
+    agentId
+    owner
+    agentURI
+    createdAt
+    updatedAt
+    totalFeedback
+    lastActivity
+    
+    # Full metadata from IPFS registration file
+    registrationFile {
+      id
+      agentId
+      name
+      description
+      image
+      active
+      x402support
+      supportedTrusts
+      
+      # MCP Configuration
+      mcpEndpoint
+      mcpVersion
+      mcpTools
+      mcpPrompts
+      mcpResources
+      
+      # A2A Configuration
+      a2aEndpoint
+      a2aVersion
+      a2aSkills
+      
+      # Identity
+      ens
+      did
+      agentWallet
+      agentWalletChainId
+      
+      createdAt
+    }
+    
+    # All feedback with details
+    feedback(
+      where: { isRevoked: false }
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      id
+      score
+      tag1
+      tag2
+      clientAddress
+      feedbackUri
+      feedbackURIType
+      feedbackHash
+      createdAt
+      
+      # IPFS feedback file details
+      feedbackFile {
+        id
+        text
+        capability
+        name
+        skill
+        task
+        context
+        proofOfPaymentFromAddress
+        proofOfPaymentToAddress
+        proofOfPaymentChainId
+        proofOfPaymentTxHash
+      }
+      
+      # All responses to this feedback
+      responses {
+        id
+        responder
+        responseUri
+        responseHash
+        createdAt
+      }
+    }
+    
+    # Agent validations
+    validations(
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      id
+      validatorAddress
+      response
+      status
+      tag
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+# =============================================================================
+# QUERY 2: MCP-Compatible Agents
+# =============================================================================
+# Get all agents that support MCP protocol with their details
+
+query GetAllMCPAgents {
+  agentRegistrationFiles(
+    where: { mcpEndpoint_not: null, active: true }
+    first: 100
+    orderBy: createdAt
+    orderDirection: desc
+  ) {
+    id
+    agentId
+    name
+    description
+    image
+    active
+    supportedTrusts
+    
+    # MCP configuration
+    mcpEndpoint
+    mcpVersion
+    mcpTools
+    mcpPrompts
+    mcpResources
+    
+    # Note: To link to agent entity for stats, you'd query separately
+    
+    createdAt
+  }
+}
+
+# =============================================================================
+# QUERY 3: Agents by Capability/Skill
+# =============================================================================
+# Note: GraphQL doesn't support filtering by array contains in registration files
+# This query gets agents and filters client-side or uses a more specific query
+
+query FindAgentsByCapability {
+  agentRegistrationFiles(
+    first: 100
+    orderBy: createdAt
+    orderDirection: desc
+  ) {
+    id
+    agentId
+    name
+    description
+    image
+    active
+    
+    # Search in these fields for specific capabilities
+    mcpTools
+    mcpPrompts
+    mcpResources
+    a2aSkills
+    
+    createdAt
+  }
+}
+
+# =============================================================================
+# QUERY 4: High-Rated Feedback
+# =============================================================================
+# Get all feedback with score greater than specified minimum
+
+query GetHighRatedFeedback($minScore: Int!) {
+  feedbacks(
+    where: { 
+      isRevoked: false
+      score_gte: $minScore
+    }
+    first: 100
+    orderBy: score
+    orderDirection: desc
+  ) {
+    id
+    score
+    tag1
+    tag2
+    createdAt
+    
+    # Agent details
+    agent {
+      id
+      agentId
+      registrationFile {
+        name
+        description
+        image
+      }
+    }
+    
+    # Client who gave feedback
+    clientAddress
+    
+    # Detailed feedback content
+    feedbackFile {
+      text
+      capability
+      skill
+      task
+      context
+    }
+    
+    # Responses
+    responses {
+      id
+      responder
+      createdAt
+    }
+  }
+}
+
+# =============================================================================
+# QUERY 5: Feedback with Responses
+# =============================================================================
+# Get all feedback that has responses
+
+query GetFeedbackWithResponses {
+  feedbacks(
+    where: { isRevoked: false }
+    first: 100
+    orderBy: createdAt
+    orderDirection: desc
+  ) {
+    id
+    score
+    tag1
+    tag2
+    createdAt
+    
+    # All response details
+    responses {
+      id
+      responder
+      responseUri
+      createdAt
+    }
+    
+    # Agent info
+    agent {
+      id
+      agentId
+      registrationFile {
+        name
+        description
+      }
+    }
+    
+    # Feedback details
+    feedbackFile {
+      text
+      capability
+      skill
+    }
+    
+    clientAddress
+  }
+}
+
+# =============================================================================
+# PRACTICAL USAGE EXAMPLES
+# =============================================================================
+
+# Example 1: Complete agent profile for agent 374
+query GetAgent374Complete {
+  agent(id: "11155111:374") {
+    id
+    chainId
+    agentId
+    owner
+    totalFeedback
+    lastActivity
+    registrationFile {
+      name
+      description
+      image
+      active
+      supportedTrusts
+      mcpEndpoint
+      mcpTools
+      a2aEndpoint
+      a2aSkills
+    }
+    feedback(
+      where: { isRevoked: false }
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      score
+      tag1
+      tag2
+      createdAt
+      feedbackFile {
+        text
+        capability
+      }
+      responses {
+        responder
+        createdAt
+      }
+    }
+  }
+}
+
+# Example 2: Find all active MCP agents
+query FindAllActiveMCPAgents {
+  agentRegistrationFiles(
+    where: { mcpEndpoint_not: null, active: true }
+    first: 50
+  ) {
+    agentId
+    name
+    description
+    mcpEndpoint
+    mcpVersion
+    mcpTools
+  }
+}
+
+# Example 3: Get feedback scoring 80+ across all agents
+query GetExcellentFeedback {
+  feedbacks(
+    where: { score_gte: 80, isRevoked: false }
+    first: 50
+    orderBy: score
+    orderDirection: desc
+  ) {
+    score
+    agent {
+      registrationFile {
+        name
+      }
+    }
+    feedbackFile {
+      text
+      capability
+    }
+    clientAddress
+    createdAt
+  }
+}
+
+# Example 4: Get agents with feedback statistics
+query GetAgentsWithStats {
+  agents(
+    first: 50
+    orderBy: totalFeedback
+    orderDirection: desc
+  ) {
+    id
+    agentId
+    registrationFile {
+      name
+      description
+    }
+    totalFeedback
+    lastActivity
+  }
+}
+
+# =============================================================================
+# HELPER QUERIES
+# =============================================================================
+
+# Get protocol-wide statistics
+query GetProtocolStats {
+  globalStats(id: "global") {
+    totalAgents
+    totalFeedback
+    totalValidations
+    totalProtocols
+    tags
+    updatedAt
+  }
+}
+
+# Get specific chain statistics (Sepolia)
+query GetSepoliaStats {
+  protocol(id: "11155111") {
+    id
+    name
+    totalAgents
+    totalFeedback
+    totalValidations
+    tags
+    updatedAt
+  }
+}
+
+# Search agents by name
+query SearchAgentsByName($searchTerm: String!) {
+  agentRegistrationFiles(
+    where: { name_contains: $searchTerm, active: true }
+    first: 50
+  ) {
+    id
+    agentId
+    name
+    description
+    image
+  }
+}
+
+# Find agents by trust model
+query FindAgentsByTrustModel($trustModel: String!) {
+  agentRegistrationFiles(
+    where: { supportedTrusts_contains: [$trustModel], active: true }
+    first: 50
+  ) {
+    id
+    agentId
+    name
+    description
+    supportedTrusts
+  }
+}
