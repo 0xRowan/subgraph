@@ -4,15 +4,15 @@ A multi-chain subgraph for indexing [ERC-8004](https://eips.ethereum.org/EIP-800
 
 ## 🌐 Supported Networks
 
-| Network | Chain ID | Status |
-|---------|----------|--------|
-| **Ethereum Sepolia** | 11155111 | ✅ Deployed |
-| **Base Sepolia** | 84532 | ✅ Ready |
-| **Linea Sepolia** | 59141 | ✅ Ready |
-| **Polygon Amoy** | 80002 | ✅ Ready |
-| **Hedera Testnet** | 296 | ✅ Ready |
-| **HyperEVM Testnet** | 998 | ✅ Ready |
-| **SKALE Base Sepolia** | 1351057110 | ✅ Ready |
+| Network | Chain ID | Status | Endpoint |
+|---------|----------|--------|----------|
+| **Ethereum Sepolia** | 11155111 | ✅ Deployed | [Endpoint](https://gateway.thegraph.com/api/subgraphs/id/6wQRC7geo9XYAhckfmfo8kbMRLeWU8KQd3XsJqFKmZLT) |
+| **Base Sepolia** | 84532 | ✅ Deployed | [Endpoint](https://gateway.thegraph.com/api/subgraphs/id/GjQEDgEKqoh5Yc8MUgxoQoRATEJdEiH7HbocfR1aFiHa) |
+| **Polygon Amoy** | 80002 | ✅ Deployed | [Endpoint](https://gateway.thegraph.com/api/subgraphs/id/2A1JB18r1mF2VNP4QBH4mmxd74kbHoM6xLXC8ABAKf7j) |
+| **Linea Sepolia** | 59141 | ✅ Ready | - |
+| **Hedera Testnet** | 296 | ✅ Ready | - |
+| **HyperEVM Testnet** | 998 | ✅ Ready | - |
+| **SKALE Base Sepolia** | 1351057110 | ✅ Ready | - |
 
 ## 🚀 Quick Start
 
@@ -546,20 +546,6 @@ The subgraph uses **File Data Sources** to parse off-chain content:
 
 Addresses are managed in `src/contract-addresses.ts` for dynamic per-chain resolution.
 
-### Supported Chains
-
-**Currently Deployed:**
-- **Ethereum Sepolia**: Chain ID 11155111
-  - Endpoint: `https://gateway.thegraph.com/api/00a452ad3cd1900273ea62c1bf283f93/subgraphs/id/6wQRC7geo9XYAhckfmfo8kbMRLeWU8KQd3XsJqFKmZLT`
-
-**Code Support (Not Yet Deployed):**
-- **Base Sepolia**: Chain ID 84532
-- **Linea Sepolia**: Chain ID 59141
-
-To deploy for additional chains:
-1. Ensure addresses are configured in `src/contract-addresses.ts`
-2. Verify data sources exist in `subgraph.yaml`
-3. Deploy to The Graph Network with appropriate network name
 
 ## 🚀 Development
 
