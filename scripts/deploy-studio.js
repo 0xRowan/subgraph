@@ -88,11 +88,13 @@ function main() {
   log('\n🚀 Deploying to The Graph Studio\n', 'cyan');
 
   const { deployment, studioSlug, manifestPath, networkInfo } = getDeploymentInfo();
+  const versionLabel = process.env.VERSION_LABEL || DEFAULT_VERSION_LABEL;
 
   // Display deployment info
   log('📋 Deployment Details:', 'bold');
   log(`   Deployment: ${deployment}`, 'cyan');
   log(`   Studio Slug: ${studioSlug}`, 'cyan');
+  log(`   Version Label: ${versionLabel}`, 'cyan');
   if (networkInfo) {
     log(`   Network: ${networkInfo.name} (Chain ID: ${networkInfo.chainId})`, 'cyan');
   }
@@ -120,10 +122,13 @@ function main() {
     log('');
 
     // Deploy to Studio (using Graph CLI v0.98+ syntax)
-    execSync(`graph deploy ${studioSlug} ${manifestPath} --node https://api.studio.thegraph.com/deploy/`, {
+    execSync(
+      `graph deploy ${studioSlug} ${manifestPath} --node https://api.studio.thegraph.com/deploy/ --version-label ${versionLabel}`,
+      {
       cwd: ROOT_DIR,
       stdio: 'inherit'
-    });
+      }
+    );
 
     log('');
     log('='.repeat(70), 'cyan');

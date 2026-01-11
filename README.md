@@ -2,6 +2,8 @@
 
 A multi-chain subgraph for indexing [ERC-8004](https://eips.ethereum.org/EIP-8004) Trustless Agents protocol data, providing GraphQL APIs for agent discovery, reputation tracking, and validation across 7 networks.
 
+**Bug reports & feedback:** Telegram: [Agent0 channel](https://t.me/agent0kitchen) | Email: team@ag0.xyz
+
 ## 🌐 Supported Networks
 
 | Network | Chain ID | Status | Endpoint |

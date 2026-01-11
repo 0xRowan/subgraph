@@ -43,10 +43,8 @@ export function handleNewFeedback(event: NewFeedback): void {
   feedback.clientAddress = clientAddress
   feedback.feedbackIndex = feedbackIndex
   feedback.score = event.params.score
-  // NOTE: tag1 is `indexed string` in the ABI; indexed strings are only available as a topic hash.
-  // The Graph exposes it as `Bytes`, so we store the hex hash.
-  let tag1Hash = event.params.tag1.toHexString()
-  feedback.tag1 = tag1Hash
+  // Jan 2026 ABI change: tag1 is now a non-indexed string, so it's available as human-readable data.
+  feedback.tag1 = event.params.tag1
   feedback.tag2 = event.params.tag2
   feedback.endpoint = event.params.endpoint
   feedback.feedbackURI = event.params.feedbackURI
@@ -96,7 +94,7 @@ export function handleNewFeedback(event: NewFeedback): void {
   // Tag statistics removed for scalability
   
   // Update protocol stats
-  updateProtocolStats(BigInt.fromI32(chainId), agent, event.block.timestamp, tag1Hash, event.params.tag2)
+  updateProtocolStats(BigInt.fromI32(chainId), agent, event.block.timestamp, feedback.tag1 ? feedback.tag1! : "", event.params.tag2)
   
   // Update global stats - feedback
   let globalStats = GlobalStats.load("global")
@@ -117,8 +115,8 @@ export function handleNewFeedback(event: NewFeedback): void {
   let currentGlobalTags = globalStats.tags
   
   // Process tag1
-  if (tag1Hash.length > 0 && !currentGlobalTags.includes(tag1Hash)) {
-    currentGlobalTags.push(tag1Hash)
+  if (feedback.tag1 && feedback.tag1!.length > 0 && !currentGlobalTags.includes(feedback.tag1!)) {
+    currentGlobalTags.push(feedback.tag1!)
   }
   // Process tag2
   if (event.params.tag2.length > 0 && !currentGlobalTags.includes(event.params.tag2)) {

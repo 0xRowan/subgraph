@@ -19,7 +19,7 @@ dataSources:
         - GlobalStats
       abis:
         - name: IdentityRegistry
-          file: ../../../abis/IdentityRegistry_updated.json
+          file: ../../../abis/IdentityRegistry_Jan112026.json
       eventHandlers:
         - event: Registered(indexed uint256,string,indexed address)
           handler: handleAgentRegistered
@@ -53,9 +53,9 @@ dataSources:
         - GlobalStats
       abis:
         - name: ReputationRegistry
-          file: ../../../abis/ReputationRegistry_updated.json
+          file: ../../../abis/ReputationRegistry_Jan112026.json
       eventHandlers:
-        - event: NewFeedback(indexed uint256,indexed address,uint64,uint8,indexed string,string,string,string,bytes32)
+        - event: NewFeedback(indexed uint256,indexed address,uint64,uint8,indexed string,string,string,string,string,bytes32)
           handler: handleNewFeedback
         - event: FeedbackRevoked(indexed uint256,indexed address,indexed uint64)
           handler: handleFeedbackRevoked
@@ -80,7 +80,7 @@ dataSources:
   #       - GlobalStats
   #     abis:
   #       - name: ValidationRegistry
-  #         file: ../../../abis/ValidationRegistry_updated.json
+  #         file: ../../../abis/ValidationRegistry_Jan112026.json
   #     eventHandlers:
   #       - event: ValidationRequest(indexed address,indexed uint256,string,indexed bytes32)
   #         handler: handleValidationRequest
@@ -106,7 +106,7 @@ templates:
         - Agent
       abis:
         - name: IdentityRegistry
-          file: ../../../abis/IdentityRegistry_updated.json
+          file: ../../../abis/IdentityRegistry_Jan112026.json
 
   - kind: file/ipfs
     name: FeedbackFile
@@ -121,4 +121,4 @@ templates:
         - Feedback
       abis:
         - name: ReputationRegistry
-          file: ../../../abis/ReputationRegistry_updated.json
+          file: ../../../abis/ReputationRegistry_Jan112026.json
