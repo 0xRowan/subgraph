@@ -26,11 +26,12 @@ export class ContractAddresses {
 
 export function getContractAddresses(chainId: BigInt): ContractAddresses {
   // Ethereum Sepolia (11155111)
+  // Updated to match config/networks/eth-sepolia.json (Jan 2026 deployment)
   if (chainId.equals(BigInt.fromI32(11155111))) {
     return new ContractAddresses(
-      Bytes.fromHexString("0x8004a6090Cd10A7288092483047B097295Fb8847"),
-      Bytes.fromHexString("0x8004B8FD1A363aa02fDC07635C0c5F94f6Af5B7E"),
-      Bytes.fromHexString("0x8004CB39f29c09145F24Ad9dDe2A108C1A2cdfC5")
+      Bytes.fromHexString("0x8004A818BFB912233c491871b3d84c89A494BD9e"),
+      Bytes.fromHexString("0x8004B663056A597Dffe9eCcC1965A193B7388713"),
+      Bytes.fromHexString("0x0000000000000000000000000000000000000000") // ValidationRegistry not deployed yet
     )
   }
   // Base Sepolia (84532)
